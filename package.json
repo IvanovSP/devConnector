@@ -4,7 +4,9 @@
   "description": "pet project",
   "main": "server.js",
   "scripts": {
-    "test": "t"
+    "test": "t",
+    "start": "node server",
+    "server": "nodemon server.js"
   },
   "author": "IvanovSP",
   "license": "MIT",
