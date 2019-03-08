@@ -1,6 +1,12 @@
-const espress = require('express')
+const espress = require('express');
+
+const mysql = require('./mysql-promise');
 
 const app = espress();
+
+const db = require('./config/keys');
+
+mysql.connect(db);
 
 app.get('/', (res) => {
   res.send('hello');
