@@ -1,7 +1,7 @@
 const exspress = require('express');
 const bodyParser = require('body-parser');
 const mysql = require('./mysql-promise');
-const db = require('./config/keys');
+const { host, user, password, database } = require('./config/keys');
 const users = require('./routes/api/users');
 const profile = require('./routes/api/profile');
 const posts = require('./routes/api/posts');
@@ -10,7 +10,7 @@ const app = exspress();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-mysql.connect(db);
+mysql.connect({ host, user, password, database });
 
 app.use('/api/users', users);
 app.use('/api/profile', profile);

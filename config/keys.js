@@ -3,4 +3,5 @@ module.exports = {
   user: 'ivanovsp88',
   password: '10041505Vfrcbv',
   database: 'petDB',
+  secret: 'secret',
 };

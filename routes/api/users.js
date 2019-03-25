@@ -1,8 +1,13 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const { promisfy } = require('promisfy');
 const mysql = require('../../mysql-promise');
+const { secret } = require('../../config/keys');
 
 const router = express.Router();
+
+const sign = promisfy(jwt.sign);
 
 // @route     GET api/users/register
 // @desc      Register User
@@ -50,13 +55,13 @@ router.post('/register', async (req, res) => {
 
 // @route     GET api/users/login
 // @desc      Login User / Returning JWT  Token
-// @access    Protected
+// @access    Public
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
   try {
     const [user] = await mysql.query(
-      `SELECT password FROM user WHERE email = "${email}" LIMIT 1`,
+      `SELECT password, handle, email, name FROM user WHERE email = "${email}" LIMIT 1`,
     );
     if (!user) {
       return res.sendStatus(404).json({ email: 'User not found' });
@@ -64,9 +69,12 @@ router.post('/login', async (req, res) => {
     const passwordIsMatch = await bcrypt.compare(password, user.password);
 
     if (passwordIsMatch) {
-      return res.json({ msg: 'Success' });
+      const payload = { name: user.name, email: user.email, id: user.handle };
+      const token = await sign(payload, secret, { expiresIn: 3600 });
+      res.json({ token: `Bearer ${token}` });
+    } else {
+      return res.sendStatus(400).json({ password: 'Password incorrect' });
     }
-    return res.sendStatus(400).json({ password: 'Password incorrect' });
   } catch (e) {
     console.log(e);
     return res.sendStatus(500);
