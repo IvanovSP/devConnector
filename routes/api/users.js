@@ -1,6 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const passport = require('passport');
 const { promisfy } = require('promisfy');
 const mysql = require('../../mysql-promise');
 const { secret } = require('../../config/keys');
@@ -75,6 +76,19 @@ router.post('/login', async (req, res) => {
     } else {
       return res.sendStatus(400).json({ password: 'Password incorrect' });
     }
+  } catch (e) {
+    console.log(e);
+    return res.sendStatus(500);
+  }
+});
+
+
+// @route     GET api/users/current
+// @desc      Return current user
+// @access    Private
+router.get('/current', passport.authenticate('jwt', { session: false }), async (req, res) => {
+  try {
+    
   } catch (e) {
     console.log(e);
     return res.sendStatus(500);
