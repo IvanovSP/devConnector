@@ -88,7 +88,7 @@ router.post('/login', async (req, res) => {
 // @access    Private
 router.get('/current', passport.authenticate('jwt', { session: false }), async (req, res) => {
   try {
-    
+    res.json(req.user);
   } catch (e) {
     console.log(e);
     return res.sendStatus(500);
