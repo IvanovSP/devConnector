@@ -5,6 +5,7 @@ const passport = require('passport');
 const { promisfy } = require('promisfy');
 const mysql = require('../../mysql-promise');
 const { secret } = require('../../config/keys');
+const validateRegister = require('../../validation/register');
 
 const router = express.Router();
 
@@ -18,6 +19,11 @@ router.post('/register', async (req, res) => {
     const {
       email, name, profStatus, currentCompany, city, github, bio, password,
     } = req.body;
+
+    const { errors, isValid } = validateRegister(req.body);
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
 
     const [emailIsExist] = await mysql.query(
       `SELECT email FROM user WHERE email = "${email}" LIMIT 1`,
