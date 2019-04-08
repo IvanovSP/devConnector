@@ -10,7 +10,7 @@ opts.secretOrKey = secret;
 module.exports = (passport) => {
   passport.use(new JwtStrategy(opts, async ({ id }, done) => {
     const [user] = await mysql.query(
-      `SELECT * FROM user WHERE handle = "${id}" LIMIT 1`,
+      `SELECT handle FROM user WHERE handle = "${id}" LIMIT 1`,
     );
     if (user) {
       return done(null, user);

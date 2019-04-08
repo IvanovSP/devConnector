@@ -10,14 +10,16 @@ const router = express.Router();
 router.get('/', passport.authenticate('jwt', { session: false }), async (req, res) => {
   const errors = {};
   try {
-    const [{ password, ...profile }] = await mysql.query(
-      `SELECT * FROM user WHERE email = "${req.user.id}" LIMIT 1`,
+    console.log(req.user);
+    const [profile] = await mysql.query(
+      `SELECT * FROM user WHERE handle = "${req.user.handle}" LIMIT 1`,
     );
     if (!profile) {
       errors.noprofiles = 'No user found';
       return res.status(404).json(errors);
     }
-    return res.json(profile);
+    const { password, ...profileToSend } = profile;
+    return res.json(profileToSend);
   } catch (e) {
     console.log(e);
     return res.sendStatus(500);
