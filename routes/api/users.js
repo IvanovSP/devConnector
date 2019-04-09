@@ -17,7 +17,7 @@ const sign = promisfy(jwt.sign);
 router.post('/register', async (req, res) => {
   try {
     const {
-      email, name, profStatus, currentCompany, city, github, bio, password,
+      email, name, password,
     } = req.body;
 
     const { errors, isValid } = validateRegister(req.body);
@@ -47,9 +47,9 @@ router.post('/register', async (req, res) => {
     const passwordHashed = await bcrypt.hash(password, salt);
 
     await mysql.query(
-      'INSERT INTO user (handle, name, prof_status_id, current_company_id, city, github_username, bio, email, password) VALUES ?',
+      'INSERT INTO user (handle, name, email, password) VALUES ?',
       [
-        [userId, name, profStatus, currentCompany, city, github, bio, email, passwordHashed],
+        [userId, name, email, passwordHashed],
       ],
     );
     return res.json({ userId });
