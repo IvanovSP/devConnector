@@ -2,6 +2,7 @@ const express = require('express');
 const passport = require('passport');
 const mysql = require('../../mysql-promise');
 const profileFieldsToParse = require('../../constants/profileFields');
+const { getUser, getExperience, getEducation, getSocial, getSkills } = require('../../queries');
 
 const router = express.Router();
 
@@ -9,16 +10,17 @@ const router = express.Router();
 // @desc      Get current user profile
 // @access    Private
 router.get('/', passport.authenticate('jwt', { session: false }), async (req, res) => {
-  const errors = {};
   try {
-    const [profile] = await mysql.query(
-      `SELECT * FROM user WHERE handle = "${req.user.handle}" LIMIT 1`,
-    );
-    if (!profile) {
-      errors.noprofiles = 'No user found';
-      return res.status(404).json(errors);
-    }
-    const { password, ...profileToSend } = profile;
+    const [user, experience, education, social, skills] = await Promise.all([
+      await mysql.query(getUser(req.user.handle)),
+      await mysql.query(getExperience(req.user.handle)),
+      await mysql.query(getEducation(req.user.handle)),
+      await mysql.query(getSocial(req.user.handle)),
+      await mysql.query(getSkills(req.user.handle)),
+    ]);
+    const profileToSend = {
+      ...user, experience, education, social, skills,
+    };
     return res.json(profileToSend);
   } catch (e) {
     console.log(e);
