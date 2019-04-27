@@ -2,7 +2,7 @@ const express = require('express');
 const passport = require('passport');
 const mysql = require('../../mysql-promise');
 const profileFieldsToParse = require('../../constants/profileFields');
-const { getUser, getExperience, getEducation, getSocial, getSkills } = require('../../queries');
+const { getUser, getExperience, getEducation, getSocial, getSkills } = require('../../queries/profile/get/index');
 
 const router = express.Router();
 
