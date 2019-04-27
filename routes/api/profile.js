@@ -32,11 +32,10 @@ router.get('/', passport.authenticate('jwt', { session: false }), async (req, re
 // @desc      update user profile
 // @access    Private
 router.post('/', passport.authenticate('jwt', { session: false }), async (req, res) => {
-  const profileFields = {};
+  const {
+    email, name, password,
+  } = req.body;
   try {
-    profileFieldsToParse.forEach((val, key) => {
-      profileFields[key] = val || null;
-    });
     return res.sendStatus(200);
   } catch (e) {
     console.log(e);
