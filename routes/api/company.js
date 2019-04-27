@@ -7,8 +7,8 @@ const router = express.Router();
 router.get('/:name', passport.authenticate('jwt', { session: false }), async (req, res) => {
   try {
     const { name } = req.params;
-    const skills = await mysql.query(`SELECT skills.id, skills.name FROM skills WHERE name RLIKE '^${name}'`);
-    return res.json({ skills });
+    const companies = await mysql.query(`SELECT company.id, company.name, company.website FROM company WHERE name RLIKE '^${name}'`);
+    return res.json({ companies });
   } catch (e) {
     console.log(e);
     return res.sendStatus(500);
@@ -17,11 +17,11 @@ router.get('/:name', passport.authenticate('jwt', { session: false }), async (re
 
 router.post('/:name', passport.authenticate('jwt', { session: false }), async (req, res) => {
   try {
-    const { name } = req.params;
+    const { name, website } = req.params;
     // INSERT INTO company (name, website) VALUES
-    await mysql.query(`INSERT INTO skills (name) VALUES ('${name}')`);
-    const [id] = await mysql.query(`SELECT skills.id FROM skills WHERE name = '${name}'`);
-    return res.json({ id, skill: name });
+    await mysql.query(`INSERT INTO company (name, website) VALUES ('${name}', '${website}')`);
+    const [id] = await mysql.query(`SELECT company.id FROM company WHERE name = ${name}`);
+    return res.json({ id, company: name, website });
   } catch (e) {
     console.log(e);
     return res.sendStatus(500);
