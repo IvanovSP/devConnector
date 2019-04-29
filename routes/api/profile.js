@@ -2,7 +2,7 @@ const express = require('express');
 const passport = require('passport');
 const mysql = require('../../mysql-promise');
 const profileFieldsToParse = require('../../constants/profileFields');
-const { getUser, getExperience, getEducation, getSocial, getSkills } = require('../../queries/profile/get/index');
+const { getUser, getExperience, getEducation, getSocial, getSkills } = require('../../queries/profile/get');
 
 const router = express.Router();
 
@@ -32,6 +32,9 @@ router.get('/', passport.authenticate('jwt', { session: false }), async (req, re
 router.post('/:userId/social/:socialId', passport.authenticate('jwt', { session: false }), async (req, res) => {
   const { userId, socialId } = req.params;
   try {
+    const [isExist] = await mysql.query(`SELECT users_social.id FROM users_social WHERE (user_id = '${userId}' AND social_id = '${socialId}')`);
+    if (isExist) return res.status(409).json({ isExist: 'record already exist' });
+
     return res.sendStatus(200);
   } catch (e) {
     console.log(e);

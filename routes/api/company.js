@@ -18,6 +18,9 @@ router.get('/:name', passport.authenticate('jwt', { session: false }), async (re
 router.post('/:name/', passport.authenticate('jwt', { session: false }), async (req, res) => {
   try {
     const { name } = req.params;
+    const [isExist] = await mysql.query(`SELECT company.id FROM company WHERE name = '${name}'`);
+    if (isExist) return res.status(409).json({ isExist: 'record already exist' });
+
     const { website } = req.query;
     // INSERT INTO company (name, website) VALUES
     await mysql.query(`INSERT INTO company (name, website) VALUES ('${name}', '${website}')`);
