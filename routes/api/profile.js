@@ -28,13 +28,9 @@ router.get('/', passport.authenticate('jwt', { session: false }), async (req, re
   }
 });
 
-// @route     POST api/profile
-// @desc      update user profile
-// @access    Private
-router.post('/', passport.authenticate('jwt', { session: false }), async (req, res) => {
-  const {
-    email, name, password,
-  } = req.body;
+
+router.post('/:userId/social/:socialId', passport.authenticate('jwt', { session: false }), async (req, res) => {
+  const { userId, socialId } = req.params;
   try {
     return res.sendStatus(200);
   } catch (e) {

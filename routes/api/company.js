@@ -15,9 +15,10 @@ router.get('/:name', passport.authenticate('jwt', { session: false }), async (re
   }
 });
 
-router.post('/:name', passport.authenticate('jwt', { session: false }), async (req, res) => {
+router.post('/:name/', passport.authenticate('jwt', { session: false }), async (req, res) => {
   try {
-    const { name, website } = req.params;
+    const { name } = req.params;
+    const { website } = req.query;
     // INSERT INTO company (name, website) VALUES
     await mysql.query(`INSERT INTO company (name, website) VALUES ('${name}', '${website}')`);
     const [id] = await mysql.query(`SELECT company.id FROM company WHERE name = ${name}`);
