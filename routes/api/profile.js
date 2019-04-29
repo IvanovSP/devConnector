@@ -34,6 +34,7 @@ router.post('/:userId/social/:socialId', passport.authenticate('jwt', { session:
   try {
     const [isExist] = await mysql.query(`SELECT users_social.id FROM users_social WHERE (user_id = '${userId}' AND social_id = '${socialId}')`);
     if (isExist) return res.status(409).json({ isExist: 'record already exist' });
+    await mysql.query(`INSERT INTO users_social (user_id, social_id) VALUES ('${userId}', '${socialId}')`);
 
     return res.sendStatus(200);
   } catch (e) {
