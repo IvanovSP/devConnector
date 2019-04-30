@@ -43,4 +43,15 @@ router.post('/:userId/social/:socialId', passport.authenticate('jwt', { session:
   }
 });
 
+router.delete('/:userId/social/:socialId', passport.authenticate('jwt', { session: false }), async (req, res) => {
+  const { userId, socialId } = req.params;
+  try {
+    await mysql.query(`DELETE FROM users_social WHERE (user_id = '${userId}' AND social_id = '${socialId}')`);
+    return res.sendStatus(200);
+  } catch (e) {
+    console.log(e);
+    return res.sendStatus(500);
+  }
+});
+
 module.exports = router;
