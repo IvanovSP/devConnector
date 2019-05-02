@@ -53,7 +53,7 @@ router.delete('/:userId/social/:socialId', passport.authenticate('jwt', { sessio
   }
 });
 
-router.post('/:userId/skills/:skillId', passport.authenticate('jwt', { session: false }), async (req, res) => {
+router.post('/:userId/skillset/:skillId', passport.authenticate('jwt', { session: false }), async (req, res) => {
   const { userId, skillId } = req.params;
   try {
     const [isExist] = await mysql.query(`SELECT skillset.id FROM skillset WHERE (user_id = '${userId}' AND skill_id = '${skillId}')`);
@@ -67,7 +67,7 @@ router.post('/:userId/skills/:skillId', passport.authenticate('jwt', { session: 
   }
 });
 
-router.delete('/:userId/skills/:skillsId', passport.authenticate('jwt', { session: false }), async (req, res) => {
+router.delete('/:userId/skillset/:skillsId', passport.authenticate('jwt', { session: false }), async (req, res) => {
   const { userId, skillId } = req.params;
   try {
     await mysql.query(`DELETE FROM skillset WHERE (user_id = '${userId}' AND skill_id = '${skillId}')`);
