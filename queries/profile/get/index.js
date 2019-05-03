@@ -1,7 +1,8 @@
 const getUser = id => (
-  `SELECT user.city, user.github_username, user.bio, user.email,
-    prof_status.name as "prof_status",
-    company.name as "company_name", company.website as "company_site"
+  `SELECT user.city, user.github_username, user.bio, user.email, user.name as "user_name"
+    prof_status.name as "prof_status", prof_status.id as "prof_status_id",
+    company.name as "company_name", company.website as "company_site",
+    company.id as "company_id"
   FROM user
     JOIN prof_status
       ON prof_status.id = user.prof_status_id
