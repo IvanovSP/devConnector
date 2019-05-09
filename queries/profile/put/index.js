@@ -20,12 +20,12 @@ const updateEducation = ({
 );
 
 const updateExpirience = ({
-  job_title, startedDate, endedDate, work_location, work_descriprion, id,
+  job_title, startedDate, endedDate, work_location, work_descriprion, id, company_id,
 }) => (
   `UPDATE expirience
   SET
     title = '${job_title}', fromCell = '${startedDate}', toCell = '${endedDate}',
-    city = '${work_location}', description = '${work_descriprion}'
+    city = '${work_location}', description = '${work_descriprion}', company_id = '${company_id}'
   WHERE id = ${id}`
 );
 

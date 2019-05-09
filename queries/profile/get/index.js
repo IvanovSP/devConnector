@@ -16,7 +16,7 @@ const getExperience = id => (
     expirience.title as "job_title", expirience.fromCell as "startedDate",
     expirience.toCell as "endedDate", expirience.city as "work_location",
     expirience.description as "work_descriprion", company.name as "company_name",
-    company.website as "company_website", expirience.id, company.id as "company_id"
+    company.website as "company_website", expirience.id, expirience.company_id as "company_id"
   FROM user
     JOIN expirience
       ON expirience.user_id = user.handle
