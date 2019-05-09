@@ -5,7 +5,10 @@ const mysql = require('./mysql-promise');
 const { host, user, password, database } = require('./config/keys');
 const users = require('./routes/api/users');
 const profile = require('./routes/api/profile');
-const posts = require('./routes/api/posts');
+const company = require('./routes/api/company');
+const skills = require('./routes/api/skills');
+const profStatus = require('./routes/api/prof-status');
+const educationalEstablishment = require('./routes/api/educational-establishment');
 
 const app = exspress();
 
@@ -19,7 +22,10 @@ require('./config/passport')(passport);
 
 app.use('/api/users', users);
 app.use('/api/profile', profile);
-app.use('/api/posts', posts);
+app.use('/api/company', company);
+app.use('/api/skills', skills);
+app.use('/api/prof-status', profStatus);
+app.use('/api/educational-establishment', educationalEstablishment);
 
 const port = process.env.PORT || 5000;
 

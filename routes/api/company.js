@@ -30,3 +30,5 @@ router.post('/:name', passport.authenticate('jwt', { session: false }), async (r
     return res.sendStatus(500);
   }
 });
+
+module.exports = router;
