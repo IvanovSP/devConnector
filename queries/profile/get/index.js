@@ -2,7 +2,7 @@ const getUser = id => (
   `SELECT user.city, user.github_username, user.bio, user.email, user.name as "user_name"
     prof_status.name as "prof_status", prof_status.id as "prof_status_id",
     company.name as "company_name", company.website as "company_site",
-    company.id as "company_id"
+    company.id as "company_id", user.handle
   FROM user
     JOIN prof_status
       ON prof_status.id = user.prof_status_id
@@ -16,7 +16,7 @@ const getExperience = id => (
     expirience.title as "job_title", expirience.fromCell as "startedDate",
     expirience.toCell as "endedDate", expirience.city as "work_location",
     expirience.description as "work_descriprion", company.name as "company_name",
-    company.website as "company_website", company.id
+    company.website as "company_website", expirience.id, company.id as "company_id"
   FROM user
     JOIN expirience
       ON expirience.user_id = user.handle
@@ -29,7 +29,8 @@ const getEducation = id => (
   `SELECT education.degree, education.stydy_field, education.program_description,
     education.formCell as "start_date", education.toCell as "end_date",
     educational_establishment.name as "establishment",
-    educational_establishment.id
+    educational_establishment.id as "establishment_id",
+    education.id
   FROM user
     JOIN education
       ON education.user_id = user.handle

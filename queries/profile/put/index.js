@@ -8,4 +8,15 @@ const updateUser = ({
   WHERE handle = ${handle}`
 );
 
-module.exports = { updateUser };
+const updateEducation = ({
+  degree, stydy_field, program_description,
+  start_date, end_date, establishment_id, id,
+}) => (
+  `UPDATE user
+  SET
+    establishment_id = '${establishment_id}', degree = '${degree}', stydy_field = '${stydy_field}',
+    program_description = '${program_description}', formCell = '${start_date}', toCell = '${end_date}'
+  WHERE id = ${id}`
+);
+
+module.exports = { updateUser, updateEducation };
