@@ -1,6 +1,7 @@
 const exspress = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
+const cors = require('cors');
 const mysql = require('./mysql-promise');
 const { host, user, password, database } = require('./config/keys');
 const users = require('./routes/api/users');
@@ -10,7 +11,11 @@ const skills = require('./routes/api/skills');
 const profStatus = require('./routes/api/prof-status');
 const educationalEstablishment = require('./routes/api/educational-establishment');
 
+const corsOptions = require('./config/whitelist');
+
 const app = exspress();
+
+app.use(cors(corsOptions));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

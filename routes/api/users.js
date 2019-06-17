@@ -65,22 +65,23 @@ router.post('/register', async (req, res) => {
 // @access    Public
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
+  if (!email || !password) return res.sendStatus(400);
 
   try {
     const [user] = await mysql.query(
       `SELECT password, handle, email, name FROM user WHERE email = "${email}" LIMIT 1`,
     );
     if (!user) {
-      return res.sendStatus(404).json({ email: 'User not found' });
+      return res.sendStatus(401);
     }
     const passwordIsMatch = await bcrypt.compare(password, user.password);
 
     if (passwordIsMatch) {
       const payload = { name: user.name, email: user.email, id: user.handle };
       const token = await sign(payload, secret, { expiresIn: 3600 });
-      res.json({ token: `Bearer ${token}` });
+      return res.json({ token: `Bearer ${token}` });
     } else {
-      return res.sendStatus(400).json({ password: 'Password incorrect' });
+      return res.sendStatus(401);
     }
   } catch (e) {
     console.log(e);
