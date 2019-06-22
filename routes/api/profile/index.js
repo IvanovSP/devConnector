@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.get('/', passport.authenticate('jwt', { session: false }), async (req, res) => {
   try {
-    const [user, experience, education, social, skills] = await Promise.all([
+    const [[user], experience, education, social, skills] = await Promise.all([
       await mysql.query(getUser(req.user.handle)),
       await mysql.query(getExperience(req.user.handle)),
       await mysql.query(getEducation(req.user.handle)),
