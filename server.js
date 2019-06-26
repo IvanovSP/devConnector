@@ -3,7 +3,9 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const cors = require('cors');
 const mysql = require('./mysql-promise');
-const { host, user, password, database } = require('./config/keys');
+const {
+  host, user, password, database,
+} = require('./config/keys');
 const users = require('./routes/api/users');
 const profile = require('./routes/api/profile');
 const company = require('./routes/api/company');
@@ -19,7 +21,9 @@ app.use(cors(corsOptions));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-mysql.connect({ host, user, password, database });
+mysql.connect({
+  host, user, password, database,
+});
 
 app.use(passport.initialize());
 
