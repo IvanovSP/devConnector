@@ -20,6 +20,9 @@ router.get('/:handle?', passport.authenticate('jwt', { session: false }), async 
       await mysql.query(getSocial(handle)),
       await mysql.query(getSkills(handle)),
     ]);
+    if (!user) {
+      return res.status(404).json({ msg: 'No such user found' });
+    }
     const profileToSend = {
       ...user, experience, education, social, skills,
     };
