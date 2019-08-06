@@ -1,11 +1,8 @@
 const getUser = id => (
   `SELECT user.city, user.github_username, user.bio, user.email, user.name as "user_name", user.avatar,
-    prof_status.name as "prof_status", prof_status.id as "prof_status_id",
-    company.name as "company_name", company.website as "company_site",
+    profession, company.name as "company_name", company.website as "company_site",
     company.id as "company_id", user.handle
   FROM user
-    JOIN prof_status
-      ON prof_status.id = user.prof_status_id
     JOIN company
       ON company.id = user.current_company_id
     WHERE user.handle = '${id}';`

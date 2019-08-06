@@ -66,7 +66,7 @@ router.put('/', passport.authenticate('jwt', { session: false }), async (req, re
     const { handle } = req.user;
 
     const {
-      city, github_username, bio, email, prof_status_id, company_id, user_name,
+      city, github_username, bio, email, profession, company_id, user_name,
     } = req.body;
 
     const [emailIsExist] = await mysql.query(
@@ -75,7 +75,7 @@ router.put('/', passport.authenticate('jwt', { session: false }), async (req, re
     if (emailIsExist) return res.status(409).json({ isExist: 'email already exist' });
 
     await mysql.query(updateUser({
-      city, github_username, bio, email, prof_status_id, company_id, user_name, handle,
+      city, github_username, bio, email, profession, company_id, user_name, handle,
     }));
 
     return res.sendStatus(200);
