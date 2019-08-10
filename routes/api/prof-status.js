@@ -7,8 +7,8 @@ const router = express.Router();
 router.get('/:name', passport.authenticate('jwt', { session: false }), async (req, res) => {
   try {
     const { name } = req.params;
-    const companies = await mysql.query(`SELECT profession.name FROM profession WHERE name RLIKE '^${name}'`);
-    return res.json({ companies });
+    const professions = await mysql.query(`SELECT profession.name FROM profession WHERE name RLIKE '^${name}'`);
+    return res.json({ professions });
   } catch (e) {
     console.log(e);
     return res.sendStatus(500);
