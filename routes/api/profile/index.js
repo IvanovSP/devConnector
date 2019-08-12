@@ -66,13 +66,31 @@ router.put('/', passport.authenticate('jwt', { session: false }), async (req, re
     const { handle } = req.user;
 
     const {
-      city, github_username, bio, email, profession, company_id, user_name,
+      city, github_username, bio, email, profession, company_name, user_name,
     } = req.body;
 
-    const [emailIsExist] = await mysql.query(
-      `SELECT user.handle FROM user WHERE (email = '${email}' AND handle != ${handle})`,
+
+    const [[emailIsExist], [professionIsExist], [companyIsExist]] = await Promise.all(
+      await mysql.query(
+        `SELECT user.handle FROM user WHERE (email = '${email}' AND handle != ${handle})`,
+        `SELECT profession.name FROM profession WHERE (name = ${profession});`,
+        `SELECT company.name, company.id FROM company WHERE (name = ${company_name});`,
+      ),
     );
     if (emailIsExist) return res.status(409).json({ isExist: 'email already exist' });
+
+    await Promise.all(
+      await (async () => {
+        if (professionIsExist) return;
+        await mysql.query(`INSERT INTO profession (name) VALUES ('${profession}')`);
+      }),
+      await (async () => {
+        if (companyIsExist) return;
+        await mysql.query(`INSERT INTO company (name) VALUES ('${company_name}')`);
+      }),
+    );
+
+    const [{ id: company_id }] = await mysql.query(`SELECT company.id FROM company WHERE (name = ${company_name});`);
 
     await mysql.query(updateUser({
       city, github_username, bio, email, profession, company_id, user_name, handle,
