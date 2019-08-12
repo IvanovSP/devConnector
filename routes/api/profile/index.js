@@ -70,27 +70,31 @@ router.put('/', passport.authenticate('jwt', { session: false }), async (req, re
     } = req.body;
 
 
-    const [[emailIsExist], [professionIsExist], [companyIsExist]] = await Promise.all(
+    const [[emailIsExist], [professionIsExist], [companyIsExist]] = await Promise.all([
       await mysql.query(
-        `SELECT user.handle FROM user WHERE (email = '${email}' AND handle != ${handle})`,
-        `SELECT profession.name FROM profession WHERE (name = ${profession});`,
-        `SELECT company.name, company.id FROM company WHERE (name = ${company_name});`,
+        `SELECT user.handle FROM user WHERE (email = '${email}' AND handle != '${handle}')`,
       ),
-    );
+      await mysql.query(
+        `SELECT profession.name FROM profession WHERE (name = '${profession}');`,
+      ),
+      await mysql.query(
+        `SELECT company.name, company.id FROM company WHERE (name = '${company_name}');`,
+      ),
+    ]);
     if (emailIsExist) return res.status(409).json({ isExist: 'email already exist' });
 
-    await Promise.all(
-      await (async () => {
+    await Promise.all([
+      (async () => {
         if (professionIsExist) return;
         await mysql.query(`INSERT INTO profession (name) VALUES ('${profession}')`);
-      }),
-      await (async () => {
+      })(),
+      (async () => {
         if (companyIsExist) return;
         await mysql.query(`INSERT INTO company (name) VALUES ('${company_name}')`);
-      }),
-    );
+      })(),
+    ]);
 
-    const [{ id: company_id }] = await mysql.query(`SELECT company.id FROM company WHERE (name = ${company_name});`);
+    const [{ id: company_id }] = await mysql.query(`SELECT company.id FROM company WHERE (name = '${company_name}');`);
 
     await mysql.query(updateUser({
       city, github_username, bio, email, profession, company_id, user_name, handle,
