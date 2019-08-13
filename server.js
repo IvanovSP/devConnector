@@ -10,6 +10,7 @@ const users = require('./routes/api/users');
 const profile = require('./routes/api/profile');
 const company = require('./routes/api/company');
 const skills = require('./routes/api/skills');
+const socials = require('./routes/api/socials');
 const profStatus = require('./routes/api/prof-status');
 const educationalEstablishment = require('./routes/api/educational-establishment');
 
@@ -33,6 +34,7 @@ app.use('/api/users', users);
 app.use('/api/profile', profile);
 app.use('/api/company', company);
 app.use('/api/skills', skills);
+app.use('/api/socials', socials);
 app.use('/api/prof-status', profStatus);
 app.use('/api/educational-establishment', educationalEstablishment);
 
