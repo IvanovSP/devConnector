@@ -39,7 +39,7 @@ const getEducation = id => (
 const getSocial = id => (
   `SELECT
     social_network.name as "social_account", social_network.icon,
-    CONCAT(social_network.url, "/", users_social.url) as "url",
+    social_network.url as "socialUrl", users_social.url as "handle",
     social_network.id
   FROM user
     JOIN users_social
