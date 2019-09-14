@@ -37,7 +37,7 @@ module.exports = (router) => {
     const { url } = req.body;
 
     try {
-      await mysql.query(`UPDATE user_social SET url = '${url}' WHERE (user_id = '${userId}' AND social_id = '${socialId}');`);
+      await mysql.query(`UPDATE users_social SET url = '${url}' WHERE (user_id = '${userId}' AND social_id = '${socialId}');`);
     } catch (e) {
       return res.sendStatus(500);
     }
