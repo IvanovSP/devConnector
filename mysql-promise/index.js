@@ -22,7 +22,7 @@ const mysqlPromise = {
     }
 
     return new Promise((resolve, reject) => {
-      this.con.query(query, [data], (err, rows) => (err ? reject(err) : resolve(rows)));
+      this.con.query(query, data, (err, rows) => (err ? reject(err) : resolve(rows)));
     });
   },
 }
