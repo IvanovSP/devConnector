@@ -2,8 +2,9 @@ const passport = require('passport');
 const mysql = require('../../../mysql-promise');
 
 module.exports = (router) => {
-  router.post('/skillset/:skillId', passport.authenticate('jwt', { session: false }), async (req, res) => {
-    const { skillId, skillName = '' } = req.params;
+  router.post('/skillset/:skillId?', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    const { skillId } = req.params;
+    const { skillName } = req.body;
     const { handle: userId } = req.user;
 
     try {
@@ -13,10 +14,10 @@ module.exports = (router) => {
         if (isExist) return res.status(409).json({ isExist: 'record already exist' });
       } else {
         await mysql.query(`INSERT INTO skills (name) VALUES ('${skillName}')`);
-        [newSkillId] = (await mysql.query(`SELECT skills.id FROM skills WHERE name = '${skillName}'`));
+        [{ id: newSkillId }] = (await mysql.query(`SELECT skills.id FROM skills WHERE name = '${skillName}'`));
       }
 
-      await mysql.query(`INSERT INTO skillset (user_id, skill_id) VALUES (${userId}, ${skillId || newSkillId})`);
+      await mysql.query('INSERT INTO skillset (user_id, skill_id) VALUES (? , ?)', [userId, (skillId || newSkillId)]);
       return res.sendStatus(200);
     } catch (e) {
       console.log(e);
@@ -24,12 +25,12 @@ module.exports = (router) => {
     }
   });
 
-  router.delete('/skillset/:skillsId', passport.authenticate('jwt', { session: false }), async (req, res) => {
+  router.delete('/skillset/:skillId', passport.authenticate('jwt', { session: false }), async (req, res) => {
     const { skillId } = req.params;
     const { handle: userId } = req.user;
 
     try {
-      await mysql.query(`DELETE FROM skillset WHERE (user_id = ${userId} AND skill_id = ${skillId})`);
+      await mysql.query('DELETE FROM skillset WHERE (user_id = ? AND skill_id = ?)', [userId, skillId]);
       return res.sendStatus(200);
     } catch (e) {
       console.log(e);
