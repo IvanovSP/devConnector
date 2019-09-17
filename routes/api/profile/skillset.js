@@ -10,7 +10,7 @@ module.exports = (router) => {
     try {
       let newSkillId = '';
       if (skillId) {
-        const [isExist] = await mysql.query(`SELECT skillset.id FROM skillset WHERE (user_id = ${userId} AND skill_id = ${skillId})`);
+        const [isExist] = await mysql.query('SELECT skillset.id FROM skillset WHERE (user_id = ? AND skill_id = ?)', [userId, skillId]);
         if (isExist) return res.status(409).json({ isExist: 'record already exist' });
       } else {
         await mysql.query(`INSERT INTO skills (name) VALUES ('${skillName}')`);

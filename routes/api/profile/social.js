@@ -43,6 +43,7 @@ module.exports = (router) => {
           userId,
           socialId,
         ]);
+      return res.sendStatus(200);
     } catch (e) {
       return res.sendStatus(500);
     }
