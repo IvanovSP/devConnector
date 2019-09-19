@@ -9,7 +9,7 @@ module.exports = (router) => {
         job_title, startedDate, endedDate, work_location, work_descriprion, id, company_name,
       } = req.body;
 
-      let [[professionIsExist], [{ id: company_id }]] = await Promise.all([
+      let [[professionIsExist], [{ id: company_id } = {}]] = await Promise.all([
         await mysql.query(
           `SELECT profession.name FROM profession WHERE (name = '${job_title}');`,
         ),
@@ -50,7 +50,7 @@ module.exports = (router) => {
         job_title, startedDate, endedDate, work_location, work_descriprion, company_name,
       } = req.body;
 
-      let [[professionIsExist], [{ id: company_id }]] = await Promise.all([
+      let [[professionIsExist], [{ id: company_id } = {}]] = await Promise.all([
         await mysql.query(
           `SELECT profession.name FROM profession WHERE (name = '${job_title}');`,
         ),
