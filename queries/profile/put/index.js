@@ -26,7 +26,7 @@ const updateExpirience = ({
   SET
     title = '${job_title}', fromCell = '${startedDate}', toCell = '${endedDate}',
     city = '${work_location}', description = '${work_descriprion}', company_id = '${company_id}'
-  WHERE id = ${id}`
+  WHERE id = '${id}'`
 );
 
 module.exports = { updateUser, updateEducation, updateExpirience };
