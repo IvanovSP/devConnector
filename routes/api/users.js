@@ -90,12 +90,14 @@ router.post('/login', async (req, res) => {
 });
 
 
-// @route     GET api/users/current
+// @route     GET api/users/:username
 // @desc      Return current user
 // @access    Private
-router.get('/current', passport.authenticate('jwt', { session: false }), async (req, res) => {
+router.get('/:username', passport.authenticate('jwt', { session: false }), async (req, res) => {
+  const { username } = req.params;
   try {
-    res.json(req.user);
+    const users = await mysql.query(`SELECT user.handle, user.name, user.avatar, user.profession, user.city FROM user WHERE name RLIKE '^${username}'`);
+    res.json(users);
   } catch (e) {
     console.log(e);
     return res.sendStatus(500);
